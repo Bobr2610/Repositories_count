@@ -1,4 +1,4 @@
-[![Repositories](https://raw.githubusercontent.com/Bobr2610/Repositories_count/main/counter.png?v=0)](https://github.com/Bobr2610/Repositories_count)
+[![Repositories](https://raw.githubusercontent.com/OWNER/REPO/main/counter.png?v=0)](https://github.com/OWNER/REPO)
 
 # Repository Counter
 
@@ -8,15 +8,15 @@ Displays the number of public repositories owned by a GitHub user or organizatio
 
 ## How to use
 
-### 1. Fork and setup on GitHub
+### 1. Copy files to your repository
 
-1. Create a **new repository** on GitHub (or use an existing one).
-2. Push the contents of this folder to the repository (to the `main` branch).
-3. In **README.md**, replace `OWNER` and `REPO` with your username and repository name in the badge link (at the top of the file).  
-   Example: if your repo is `https://github.com/YourName/my-project`, the line should be:
-   ```markdown
-   [![Repositories](https://raw.githubusercontent.com/YourName/my-project/main/counter.png?v=0)](https://github.com/YourName/my-project)
-   ```
+Clone or download and add to your repository:
+
+| File/folder                          | Description                             |
+| ------------------------------------ | --------------------------------------- |
+| .github/workflows/update-counter.yml | GitHub Actions workflow                 |
+| theme/                               | Digit images 0.png–9.png (beaver theme) |
+| counter.json                         | {"count": 0} — fallback when API fails  |
 
 ### 2. Personal Access Token
 
@@ -39,12 +39,27 @@ You can get them from the original repository:
 - [Views_Counter_with_custom_images — theme](https://github.com/Bobr2610/Views_Counter_with_custom_images/tree/main/theme)  
   Download the `theme` folder and place it in the root of your repo.
 
-### 5. Run
+### 5. Add the badge to README
 
-- **Scheduled:** the workflow runs every hour and on push (except when only `counter.png`, `theme/`, or `README.md` are changed).
-- **Manual:** **Actions** → **Update Repository Counter** → **Run workflow**.
+Insert this line into your README (or keep the one that comes with the repo):
 
-After the first successful run, the README will be updated with the correct image link including `?v=...` — you don't need to change it manually.
+```markdown
+[![Repositories](https://raw.githubusercontent.com/OWNER/REPO/main/counter.png?v=0)](https://github.com/OWNER/REPO)
+```
+
+**Autonomous:** On the first run, the workflow automatically replaces `OWNER/REPO` and the branch with your repository — no manual editing needed. It also updates `?v=` to a timestamp on each run to avoid cache.
+
+### 6. Running
+
+- **Automatically:** the workflow runs every hour and on push (except for changes to `counter.png`, `theme/`, `README.md`)
+- **Manually:** **Actions** → **Update Repository Counter** → **Run workflow**
+
+---
+
+## Configuration
+
+1. Add the **`TRAFFIC_TOKEN`** secret — Personal Access Token with `read:user` or `repo` permission
+2. The workflow is **fully autonomous**: it detects the current repository and branch, updates the badge URL automatically (works when forked), and refreshes `counter.png` every hour and on push
 
 ---
 
