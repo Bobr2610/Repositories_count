@@ -1,0 +1,73 @@
+name: Update Repository Counter
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - counter.png
+      - theme/
+      - README.md
+  schedule:
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get repository count
+        id: count
+        env:
+          TOKEN: ${{ secrets.TRAFFIC_TOKEN }}
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          # Try GitHub API: users for personal accounts, orgs for organizations
+          if [ -n "$TOKEN" ]; then
+            RESPONSE=$(curl -sS -H "Authorization: token $TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/users/$OWNER" || echo '{}')
+            if echo "$RESPONSE" | jq -e '.public_repos' > /dev/null 2>&1; then
+              REPOS=$(echo "$RESPONSE" | jq -r '.public_repos')
+            else
+              # Fallback: try orgs endpoint (owner might be an organization)
+              RESPONSE=$(curl -sS -H "Authorization: token $TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/orgs/$OWNER" || echo '{}')
+              if echo "$RESPONSE" | jq -e '.public_repos' > /dev/null 2>&1; then
+                REPOS=$(echo "$RESPONSE" | jq -r '.public_repos')
+              else
+                REPOS=$(jq -r '.count // 0' counter.json 2>/dev/null || echo "0")
+              fi
+            fi
+          else
+            REPOS=$(jq -r '.count // 0' counter.json 2>/dev/null || echo "0")
+          fi
+          echo "repos=$REPOS" >> $GITHUB_OUTPUT
+
+      - name: Generate counter from theme
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends imagemagick
+          n=${{ steps.count.outputs.repos }}
+          digits=$(printf "%07d" $n)
+          files=$(echo $digits | sed 's/\(.\)/theme\/\1.png /g')
+          convert $files -resize 80x80 +append counter.png
+
+      - name: Update README cache-bust
+        id: cachebust
+        run: |
+          TS=$(date +%s)
+          echo "ts=$TS" >> $GITHUB_OUTPUT
+          # Update badge link (only this repo's URL, not example templates)
+          sed -i -E "s|(raw\.githubusercontent\.com/${{ github.repository }}/main/counter\.png)(\?v=[0-9]+)?|\1?v=$TS|g" README.md
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add counter.png README.md
+          git diff --staged --quiet || git commit -m "Update repository count: ${{ steps.count.outputs.repos }}"
+          git push
