@@ -72,7 +72,7 @@ jobs:
           repo = os.environ['REPO']
           branch = os.environ['BRANCH']
           ts = os.environ['TS']
-          pattern = r'\[!\[Repositories\]\(https://raw\.githubusercontent\.com/[^/]+/[^/]+/[^/]+/counter\.png)(\?v=[0-9]+)?\)\]\(https://github\.com/[^/]+/[^/]+\)'
+          pattern = r'\[!\[Repositories\]\(https://raw\.githubusercontent\.com/[^/]+/[^/]+/[^/]+/counter\.png(\?v=[0-9]+)?\)\]\(https://github\.com/[^/]+/[^/]+\)'
           replacement = f'[![Repositories](https://raw.githubusercontent.com/{repo}/{branch}/counter.png?v={ts})](https://github.com/{repo})'
           content = re.sub(pattern, replacement, content)
           with open('README.md', 'w') as f:
