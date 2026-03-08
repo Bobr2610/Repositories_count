@@ -1,4 +1,4 @@
-[![Repositories](https://raw.githubusercontent.com/OWNER/REPO/main/counter.png?v=0)](https://github.com/OWNER/REPO)
+[![Repositories](https://raw.githubusercontent.com/Bobr2610/Repositories_count/main/counter.png?v=0)](https://github.com/Bobr2610/Repositories_count)
 
 # Repository Counter
 
