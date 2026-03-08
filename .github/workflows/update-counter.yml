@@ -64,7 +64,7 @@ jobs:
           BRANCH="${{ github.ref_name }}"
           REPO="${{ github.repository }}"
           # Replace any badge URL with current repo/branch — works when forked
-          sed -i -E "s|\[!\[Repositories\]\(https://raw\.githubusercontent\.com/[^/]+/[^/]+/[^/]+/counter\.png)(\?v=[0-9]+)?\)\]\(https://github\.com/[^/]+/[^/]+\)|[![Repositories](https://raw.githubusercontent.com/${REPO}/${BRANCH}/counter.png?v=${TS})](https://github.com/${REPO})|g" README.md
+          sed -i -E "s|\[!\[Repositories\]\(https://raw\.githubusercontent\.com/[^/]+/[^/]+/[^/]+/counter\.png(\?v=[0-9]+)?\)\]\(https://github\.com/[^/]+/[^/]+\)|[![Repositories](https://raw.githubusercontent.com/${REPO}/${BRANCH}/counter.png?v=${TS})](https://github.com/${REPO})|g" README.md
 
       - name: Commit and Push
         run: |
