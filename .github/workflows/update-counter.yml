@@ -61,10 +61,11 @@ jobs:
         run: |
           TS=$(date +%s)
           echo "ts=$TS" >> $GITHUB_OUTPUT
-          BRANCH="${{ github.ref_name }}"
-          REPO="${{ github.repository }}"
+          export BRANCH="${{ github.ref_name }}"
+          export REPO="${{ github.repository }}"
+          export TS
           # Replace any badge URL with current repo/branch — works when forked
-          sed -i -E "s|\[!\[Repositories\]\(https://raw\.githubusercontent\.com/[^/]+/[^/]+/[^/]+/counter\.png(\?v=[0-9]+)?\)\]\(https://github\.com/[^/]+/[^/]+\)|[![Repositories](https://raw.githubusercontent.com/${REPO}/${BRANCH}/counter.png?v=${TS})](https://github.com/${REPO})|g" README.md
+          perl -i -pe 's{\[!\[Repositories\]\(https://raw\.githubusercontent\.com/[^/]+/[^/]+/[^/]+/counter\.png)(\?v=[0-9]+)?\)\]\(https://github\.com/[^/]+/[^/]+\)}{[![Repositories](https://raw.githubusercontent.com/$ENV{REPO}/$ENV{BRANCH}/counter.png?v=$ENV{TS})](https://github.com/$ENV{REPO})}g' README.md
 
       - name: Commit and Push
         run: |
