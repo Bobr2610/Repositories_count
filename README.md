@@ -1,4 +1,4 @@
-[![Repositories](https://raw.githubusercontent.com/Bobr2610/Repositories_count/main/counter.png?v=1773331707)](https://github.com/Bobr2610/Repositories_count)
+[![Repositories](https://raw.githubusercontent.com/Bobr2610/Repositories_count/main/counter.png?v=1773338038)](https://github.com/Bobr2610/Repositories_count)
 
 # Repository Counter
 
@@ -44,7 +44,7 @@ You can get them from the original repository:
 Insert this line into your README (or keep the one that comes with the repo):
 
 ```markdown
-[![Repositories](https://raw.githubusercontent.com/Bobr2610/Repositories_count/main/counter.png?v=1773331707)](https://github.com/Bobr2610/Repositories_count)
+[![Repositories](https://raw.githubusercontent.com/Bobr2610/Repositories_count/main/counter.png?v=1773338038)](https://github.com/Bobr2610/Repositories_count)
 ```
 
 **Autonomous:** On the first run, the workflow automatically replaces `OWNER/REPO` and the branch with your repository — no manual editing needed. It also updates `?v=` to a timestamp on each run to avoid cache.
